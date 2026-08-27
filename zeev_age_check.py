@@ -1,5 +1,6 @@
+# a Function to check age suitable for work
+# פונקציה לבדיקת גיל מתאים לעבודה
 def id_names():
-    """ a Function to check age suitable for work """
     number = 0
     while number <= 10:# loop for 10 times 
         id_num = int(input("Enter your age :"))
