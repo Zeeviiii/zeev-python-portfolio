@@ -1,3 +1,5 @@
+# Checks age and then multiplies by 2
+# בודק את גיל ואז מכפיל ב 2
 age = int(input(" enter your age : "))
 if age * 2 >= 100 :
           print (f"Over 100 ")
