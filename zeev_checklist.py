@@ -1,3 +1,5 @@
+# Check the temperature of an autoclave (sterilization machine) with this one to see if it's ready to use or not!
+# בודק טפרטורה של אוטוקלב (מכונה לעיקור) עם זה מוכן לשימוש או לא !
 def checklist ():
     machine = 1
     while machine <= 4:
