@@ -1,3 +1,5 @@
+# A numerical calculator that operates by selecting a user action.
+#  מחשבון מספרי שפועל על יד בחירה פעולה של משתמש   
 def calculator():
     while True:
         number_1 = int(input(" Enter a first number :"))
