@@ -1,3 +1,5 @@
+# Checks if the number the user entered is greater than 150 or equal to 0.
+# בודק עם מספר שהמשתמש הקיש גדול מ 150 או שווה ל 0
 def check_number(number):
     if number >= 100 and number <= 150: 
         print("Over 100")
