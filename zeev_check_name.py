@@ -1,3 +1,5 @@
+# Checks how many characters are in the name the user entered.
+# בודק את כמה אורך התווים בשם שהמשתמש הקליט
 def check_name (name):
     if len(name)< 4:
      print ("Short")
