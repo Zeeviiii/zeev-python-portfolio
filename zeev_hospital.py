@@ -1,22 +1,10 @@
-"""בדיקת התאמה בין מחלקה לקומה — בית החולים שערי צדק.
+# בדיקת מחלקה מול קומה — בית החולים שערי צדק
+# התוכנית שואלת שם מחלקה ומספר קומה, ובודקת אם הקומה נכונה.
 
-התוכנית קוראת זוגות של שם מחלקה ומספר קומה, ובודקת אם הקומה נכונה.
-מפת המחלקות יושבת במילון אחד, ולכן הוספת מחלקה היא שורה אחת של נתונים
-ולא ענף elif נוסף.
 
-הרצה:
-    python3 zeev_hospital.py
-
-הרצה עם קובץ קלט:
-    python3 zeev_hospital.py < departments.txt
-
-בדיקות:
-    pytest
-"""
-
-# מקור האמת היחיד של התוכנית: מחלקה -> קומה.
-# שתי מחלקות יכולות לחלוק קומה, וזה נשמר כאן באופן טבעי.
-FLOORS: dict[str, int] = {
+# מילון: שם מחלקה -> מספר קומה
+# במקום 12 ענפי elif, כל מחלקה היא שורה אחת כאן.
+FLOORS = {
     "אספקה סטרילית": 1,
     "מטבח": 1,
     "חדר ניתוח": 2,
@@ -34,66 +22,59 @@ FLOORS: dict[str, int] = {
 }
 
 
-def floor_of(department: str) -> int | None:
-    """מחזיר את הקומה של המחלקה, או None אם המחלקה אינה ברשימה.
+def floor_of(department):
+    # מוריד רווחים מההתחלה ומהסוף: "  מטבח " -> "מטבח"
+    department = department.strip()
 
-    רווחים מיותרים בקצוות הקלט מנוקים, כך שגם "  מטבח " יימצא.
-    """
-    return FLOORS.get(department.strip())
+    # אם המחלקה נמצאת במילון — מחזירים את הקומה שלה
+    if department in FLOORS:
+        return FLOORS[department]
+
+    # אם לא — מחזירים None, כלומר "אין תשובה"
+    return None
 
 
-def is_correct_floor(department: str, floor: int) -> bool:
-    """בודק אם המחלקה אכן נמצאת בקומה שנמסרה.
-
-    מחלקה שאינה ברשימה מחזירה False — לא מניחים שהיא נכונה.
-    """
+def is_correct_floor(department, floor):
+    # נכון רק אם הקומה שבמילון שווה לקומה שהמשתמש הקליד
     return floor_of(department) == floor
 
 
-def parse_floor(raw: str) -> int | None:
-    """ממיר טקסט למספר קומה. מחזיר None אם הקלט אינו מספר שלם."""
+def parse_floor(text):
+    # מנסה להפוך טקסט למספר.
+    # אם זה לא מספר (למשל "תשע") — מחזיר None במקום לקרוס.
     try:
-        return int(raw.strip())
+        return int(text.strip())
     except ValueError:
         return None
 
 
-def main() -> None:
-    """לולאת הבדיקה: קוראת זוגות עד שנגמר הקלט, ומסכמת בסוף."""
-    checked = 0
+def main():
+    times = parse_floor(input("כמה מחלקות לבדוק? "))
+    if times is None:
+        print("צריך להקליד מספר.")
+        return
+
     correct = 0
+    count = 0
+    while count < times:
+        department = input("הכנס שם מחלקה: ")
+        floor = parse_floor(input("הכנס מספר קומה: "))
+        count += 1
 
-    print("בדיקת מחלקה מול קומה. סיום — כשנגמר הקלט.\n")
-
-    while True:
-        try:
-            department = input("הכנס שם מחלקה: ")
-            raw_floor = input("הכנס מספר קומה: ")
-        except EOFError:
-            break
-
-        floor = parse_floor(raw_floor)
         if floor is None:
-            print(f"  '{raw_floor.strip()}' אינו מספר קומה תקין.\n")
-            continue
-
-        expected = floor_of(department)
-        if expected is None:
-            print(f"  המחלקה '{department.strip()}' אינה ברשימה.\n")
-            continue
-
-        checked += 1
-        if floor == expected:
+            print("  זה לא מספר קומה.")
+        elif floor_of(department) is None:
+            print("  המחלקה לא ברשימה.")
+        elif is_correct_floor(department, floor):
+            print("  הקומה נכונה")
             correct += 1
-            print("  הקומה נכונה\n")
         else:
-            print(f"  הקומה שגויה — {department.strip()} נמצאת בקומה {expected}\n")
+            print("  הקומה שגויה — המחלקה נמצאת בקומה", floor_of(department))
 
-    if checked == 0:
-        print("לא התקבלו בדיקות. הזינו זוגות של שם מחלקה ומספר קומה.")
-    else:
-        print(f"סיכום: {correct} נכונות מתוך {checked} בדיקות.")
+    print("סיכום:", correct, "נכונות מתוך", times)
 
 
+# מפעיל את main רק כשמריצים את הקובץ ישירות.
+# בלי השורה הזו, הבדיקות (pytest) היו מפעילות את התוכנית ונתקעות על input.
 if __name__ == "__main__":
     main()
