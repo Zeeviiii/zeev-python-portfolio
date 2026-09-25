@@ -4,7 +4,7 @@ def temperature(machine,heat):
     elif machine >= 1 and machine <=4:
        result = "Check temperature!"
     elif heat >= 90 and heat <= 135 :
-       result = "Check Machinte number!"
+       result = "Check Machine number!"
     else :
        result = "DANGER - Stop everything !!!"
     return result   
